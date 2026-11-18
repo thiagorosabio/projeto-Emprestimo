@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4b287d">
+  <meta name="description" content="Sistema de Empréstimos de Equipamentos — Além das Barreiras.">
+  <title>Sistema de Empréstimos de Equipamentos | Além das Barreiras</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <!-- Filipe (documentação e apresentação): identidade do Squad 2 exibida na interface para apresentar o projeto com uma marca consistente. -->
+  <div id="loginScreen" class="login-screen">
+    <section class="login-brand" aria-label="Apresentação do projeto">
+      <div class="brand-lockup brand-lockup-large">
+        <div class="brand-mark" aria-hidden="true">AB</div>
+        <div>
+          <p class="brand-team">EQUIPE 2 · ALÉM DAS BARREIRAS</p>
+          <p class="brand-name">Além das Barreiras</p>
+        </div>
+      </div>
+      <div class="login-brand-copy">
+        <p class="eyebrow">ORGANIZAÇÃO E CONTROLE</p>
+        <h1>Equipamentos sempre no lugar certo.</h1>
+        <p>Uma forma simples de acompanhar equipamentos, colaboradores, empréstimos e devoluções.</p>
+      </div>
+      <div class="login-brand-footer">Projeto desenvolvido pelo Squad 2</div>
+    </section>
+
+    <main class="login-panel">
+      <div class="login-card">
+        <div class="mobile-brand brand-lockup">
+          <div class="brand-mark" aria-hidden="true">AB</div>
+          <div>
+            <p class="brand-team">EQUIPE 2</p>
+            <p class="brand-name">Além das Barreiras</p>
+          </div>
+        </div>
+        <p class="eyebrow">BEM-VINDO(A)</p>
+        <h2>Acesse sua conta</h2>
+        <p class="muted">Entre com seu usuário e sua senha para continuar.</p>
+
+        <form id="loginForm" class="form-stack">
+          <div class="field">
+            <label for="loginUsuario">Usuário</label>
+            <input id="loginUsuario" name="usuario" type="text" autocomplete="username" placeholder="Digite seu usuário" required>
+          </div>
+          <div class="field">
+            <label for="loginSenha">Senha</label>
+            <input id="loginSenha" name="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+          </div>
+          <button class="button button-primary button-full" type="submit">Entrar no sistema</button>
+        </form>
+        <!-- Lara (QA): região aria-live anuncia erros e confirmações sem depender apenas de cor ou elementos visuais. -->
+        <div id="loginMessage" class="message" role="status" aria-live="polite" aria-atomic="true"></div>
+        <p class="login-footnote">Acesso protegido por autenticação.</p>
+      </div>
+    </main>
+  </div>
+
+  <div id="appScreen" class="app-screen is-hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">AB</div>
+          <div>
+            <p class="brand-team">EQUIPE 2</p>
+            <p class="brand-name">Além das Barreiras</p>
+          </div>
+        </div>
+        <p class="system-label">Sistema de Empréstimos de Equipamentos</p>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <p class="nav-caption">MENU PRINCIPAL</p>
+        <button class="nav-link is-active" type="button" data-view="dashboard" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">⌂</span><span>Visão geral</span>
+        </button>
+        <button class="nav-link" type="button" data-view="equipamentos">
+          <span class="nav-icon" aria-hidden="true">▣</span><span>Equipamentos</span>
+        </button>
+        <button class="nav-link admin-only" type="button" data-view="colaboradores">
+          <span class="nav-icon" aria-hidden="true">♙</span><span>Colaboradores</span>
+        </button>
+        <button class="nav-link" type="button" data-view="emprestimos">
+          <span class="nav-icon" aria-hidden="true">⇄</span><span>Empréstimos</span>
+        </button>
+        <button class="nav-link" type="button" data-view="atrasados">
+          <span class="nav-icon" aria-hidden="true">◷</span><span>Atrasados</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-note">
+          <span class="note-dot" aria-hidden="true"></span>
+          <span>Controle simples, equipe conectada.</span>
+        </div>
+        <button id="logoutButton" class="nav-link logout-link" type="button">
+          <span class="nav-icon" aria-hidden="true">↪</span><span>Sair da conta</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenuButton" class="mobile-menu-button" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+          <div>
+            <p class="topbar-kicker">ALÉM DAS BARREIRAS</p>
+            <p id="topbarTitle" class="topbar-title">Visão geral</p>
+          </div>
+        </div>
+        <div class="user-area">
+          <div class="user-avatar" aria-hidden="true">AB</div>
+          <div class="user-copy">
+            <span id="userName">Usuário</span>
+            <small id="userRole">Perfil</small>
+          </div>
+        </div>
+      </header>
+
+      <!-- Lara (QA): mensagens centralizadas e anunciadas por leitores de tela para feedback de todas as operações. -->
+      <div id="globalMessage" class="message global-message" role="status" aria-live="polite" aria-atomic="true"></div>
+
+      <div class="page-content">
+        <section id="view-dashboard" class="view-section" aria-labelledby="dashboardHeading">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">PAINEL DE CONTROLE</p>
+              <h1 id="dashboardHeading">Visão geral</h1>
+              <p class="muted">Acompanhe a situação dos equipamentos e empréstimos.</p>
+            </div>
+            <span class="date-pill" id="todayLabel">Painel do sistema</span>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card stat-card-purple">
+              <div class="stat-icon" aria-hidden="true">▣</div>
+              <p>Total de equipamentos</p>
+              <strong id="statTotal">—</strong>
+              <small>Itens cadastrados</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-soft" aria-hidden="true">✓</div>
+              <p>Disponíveis</p>
+              <strong id="statAvailable">—</strong>
+              <small>Prontos para empréstimo</small>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-soft" aria-hidden="true">⇄</div>
+              <p>Emprestados</p>
+              <strong id="statLoaned">—</strong>
+              <small>Em posse de colaboradores</small>
+            </article>
+            <article class="stat-card stat-card-alert">
+              <div class="stat-icon stat-icon-alert" aria-hidden="true">◷</div>
+              <p>Em atraso</p>
+              <strong id="statOverdue">—</strong>
+              <small>Precisam de acompanhamento</small>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel welcome-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">SQUAD 2</p>
+                  <h2>Além das Barreiras</h2>
+                </div>
+                <span class="welcome-symbol" aria-hidden="true">✦</span>
+              </div>
+              <p>Uma plataforma para organizar o cadastro de equipamentos e colaboradores, registrar empréstimos e acompanhar devoluções.</p>
+              <button class="button button-primary" type="button" data-go-view="equipamentos">Consultar equipamentos</button>
+            </article>
+            <article class="panel quick-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">ACESSO RÁPIDO</p>
+                  <h2>O que deseja fazer?</h2>
+                </div>
+              </div>
+              <div class="quick-actions">
+                <button type="button" class="quick-action admin-only" data-go-view="equipamentos"><span>＋</span><span><b>Cadastrar equipamento</b><small>Adicionar um novo item</small></span><span class="quick-arrow">›</span></button>
+                <button type="button" class="quick-action admin-only" data-go-view="colaboradores"><span>＋</span><span><b>Cadastrar colaborador</b><small>Registrar uma pessoa</small></span><span class="quick-arrow">›</span></button>
+                <button type="button" class="quick-action admin-only" data-go-view="emprestimos"><span>⇄</span><span><b>Registrar empréstimo</b><small>Vincular item e colaborador</small></span><span class="quick-arrow">›</span></button>
+                <button type="button" class="quick-action" data-go-view="atrasados"><span>◷</span><span><b>Ver atrasados</b><small>Acompanhar devoluções pendentes</small></span><span class="quick-arrow">›</span></button>
+              </div>
+            </article>
+          </div>
+          <p class="page-credit">Sistema de Empréstimos de Equipamentos · Equipe 2 — Além das Barreiras</p>
+        </section>
+
+        <section id="view-equipamentos" class="view-section is-hidden" aria-labelledby="equipamentosHeading">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">INVENTÁRIO</p>
+              <h1 id="equipamentosHeading">Equipamentos</h1>
+              <p class="muted">Consulte os itens e veja quais estão disponíveis ou emprestados.</p>
+            </div>
+            <button id="refreshEquipamentos" class="button button-secondary" type="button">↻ Atualizar lista</button>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel admin-only" id="equipmentFormPanel">
+              <div class="panel-heading">
+                <div><p class="eyebrow">NOVO ITEM</p><h2>Cadastrar equipamento</h2></div>
+                <span class="panel-heading-icon" aria-hidden="true">＋</span>
+              </div>
+              <form id="equipmentForm" class="form-stack">
+                <div class="field">
+                  <label for="equipamentoPatrimonio">Patrimônio</label>
+                  <input id="equipamentoPatrimonio" name="patrimonio" type="text" placeholder="Ex.: NB-0001" required>
+                </div>
+                <div class="field">
+                  <label for="equipamentoNome">Nome do equipamento</label>
+                  <input id="equipamentoNome" name="nome" type="text" placeholder="Ex.: Notebook Dell" required>
+                </div>
+                <div class="field">
+                  <label for="equipamentoTipo">Tipo</label>
+                  <select id="equipamentoTipo" name="tipo" required>
+                    <option value="">Selecione o tipo</option>
+                    <option value="NOTEBOOK">Notebook</option>
+                    <option value="MONITOR">Monitor</option>
+                    <option value="HEADSET">Headset</option>
+                    <option value="TECLADO">Teclado</option>
+                    <option value="MOUSE">Mouse</option>
+                    <option value="OUTRO">Outro</option>
+                  </select>
+                </div>
+                <button class="button button-primary button-full" type="submit">Salvar equipamento</button>
+              </form>
+              <p class="form-hint">O equipamento será cadastrado como disponível pela API.</p>
+            </article>
+
+            <article class="panel list-panel">
+              <div class="panel-heading list-heading">
+                <div><p class="eyebrow">ITENS CADASTRADOS</p><h2>Lista de equipamentos</h2></div>
+                <span id="equipmentCount" class="count-pill">0 itens</span>
+              </div>
+              <div class="filter-row">
+                <div class="field filter-field">
+                  <label for="filterEquipmentType">Filtrar por tipo</label>
+                  <select id="filterEquipmentType">
+                    <option value="">Todos os tipos</option>
+                    <option value="NOTEBOOK">Notebook</option>
+                    <option value="MONITOR">Monitor</option>
+                    <option value="HEADSET">Headset</option>
+                    <option value="TECLADO">Teclado</option>
+                    <option value="MOUSE">Mouse</option>
+                    <option value="OUTRO">Outro</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Patrimônio</th><th>Equipamento</th><th>Tipo</th><th>Status</th><th class="admin-only">Ações</th></tr></thead>
+                  <tbody id="equipmentTableBody"><tr><td colspan="5" class="table-empty">Faça login para carregar os equipamentos.</td></tr></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-colaboradores" class="view-section is-hidden" aria-labelledby="colaboradoresHeading">
+          <div class="page-heading">
+            <div><p class="eyebrow">PESSOAS</p><h1 id="colaboradoresHeading">Colaboradores</h1><p class="muted">Cadastre e consulte os colaboradores da empresa.</p></div>
+            <button id="refreshColaboradores" class="button button-secondary" type="button">↻ Atualizar lista</button>
+          </div>
+          <div class="content-grid">
+            <article class="panel admin-only">
+              <div class="panel-heading"><div><p class="eyebrow">NOVO CADASTRO</p><h2>Cadastrar colaborador</h2></div><span class="panel-heading-icon" aria-hidden="true">＋</span></div>
+              <form id="collaboratorForm" class="form-stack">
+                <div class="field"><label for="colaboradorNome">Nome completo</label><input id="colaboradorNome" name="nome" type="text" placeholder="Nome do colaborador" required></div>
+                <div class="field"><label for="colaboradorEmail">E-mail</label><input id="colaboradorEmail" name="email" type="email" placeholder="nome@empresa.com" required></div>
+                <div class="field"><label for="colaboradorCep">CEP</label><input id="colaboradorCep" name="cep" type="text" inputmode="numeric" maxlength="8" placeholder="Somente números" required></div>
+                <div class="field"><label for="colaboradorNumero">Número</label><input id="colaboradorNumero" name="numero" type="text" placeholder="Número do endereço" required></div>
+                <div class="address-note"><span aria-hidden="true">⌖</span><p>O logradouro, bairro, cidade e UF serão preenchidos pela API usando o CEP informado.</p></div>
+                <button class="button button-primary button-full" type="submit">Salvar colaborador</button>
+              </form>
+            </article>
+            <article class="panel list-panel">
+              <div class="panel-heading list-heading"><div><p class="eyebrow">BASE DE PESSOAS</p><h2>Colaboradores cadastrados</h2></div><span id="collaboratorCount" class="count-pill">0 pessoas</span></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Nome</th><th>E-mail</th><th>CEP</th><th>Endereço</th></tr></thead>
+                  <tbody id="collaboratorTableBody"><tr><td colspan="4" class="table-empty">Nenhum colaborador carregado.</td></tr></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-emprestimos" class="view-section is-hidden" aria-labelledby="emprestimosHeading">
+          <div class="page-heading">
+            <div><p class="eyebrow">MOVIMENTAÇÕES</p><h1 id="emprestimosHeading">Empréstimos</h1><p class="muted">Registre novos empréstimos e acompanhe as devoluções.</p></div>
+            <button id="refreshLoans" class="button button-secondary" type="button">↻ Atualizar lista</button>
+          </div>
+          <div class="content-grid">
+            <article class="panel admin-only">
+              <div class="panel-heading"><div><p class="eyebrow">NOVA MOVIMENTAÇÃO</p><h2>Registrar empréstimo</h2></div><span class="panel-heading-icon" aria-hidden="true">⇄</span></div>
+              <form id="loanForm" class="form-stack">
+                <div class="field"><label for="loanEquipment">Equipamento disponível</label><select id="loanEquipment" name="equipamentoId" required><option value="">Carregando equipamentos...</option></select></div>
+                <div class="field"><label for="loanCollaborator">Colaborador</label><select id="loanCollaborator" name="colaboradorId" required><option value="">Carregando colaboradores...</option></select></div>
+                <button class="button button-primary button-full" type="submit">Registrar empréstimo</button>
+              </form>
+              <p class="form-hint">A API registra as datas do empréstimo e a previsão de devolução.</p>
+            </article>
+            <article class="panel list-panel">
+              <div class="panel-heading list-heading"><div><p class="eyebrow">HISTÓRICO</p><h2>Empréstimos registrados</h2></div><span id="loanCount" class="count-pill">0 registros</span></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Equipamento</th><th>Colaborador</th><th>Empréstimo</th><th>Previsão</th><th>Status</th><th class="admin-only">Ação</th></tr></thead>
+                  <tbody id="loanTableBody"><tr><td colspan="6" class="table-empty">Nenhum empréstimo carregado.</td></tr></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="view-atrasados" class="view-section is-hidden" aria-labelledby="atrasadosHeading">
+          <div class="page-heading">
+            <div><p class="eyebrow">ACOMPANHAMENTO</p><h1 id="atrasadosHeading">Empréstimos atrasados</h1><p class="muted">Consulte os empréstimos que a API identificou como atrasados.</p></div>
+            <button id="refreshOverdue" class="button button-secondary" type="button">↻ Atualizar lista</button>
+          </div>
+          <article class="panel list-panel">
+            <div class="panel-heading list-heading"><div><p class="eyebrow">PENDÊNCIAS</p><h2>Itens com devolução vencida</h2></div><span id="overdueCount" class="count-pill count-pill-alert">0 atrasados</span></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Patrimônio</th><th>Equipamento</th><th>Colaborador</th><th>E-mail</th><th>Devolução prevista</th></tr></thead>
+                <tbody id="overdueTableBody"><tr><td colspan="5" class="table-empty">Nenhum empréstimo atrasado carregado.</td></tr></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lucas (tech lead): modal simples para atualizar apenas nome e tipo, conforme o contrato da rota PUT /equipamentos/{id}. -->
+  <dialog id="editEquipmentDialog" class="edit-dialog" aria-labelledby="editDialogTitle">
+    <form id="editEquipmentForm" class="form-stack dialog-form">
+      <div class="panel-heading"><div><p class="eyebrow">ATUALIZAÇÃO</p><h2 id="editDialogTitle">Editar equipamento</h2></div><button type="button" id="closeEditDialog" class="icon-button" aria-label="Fechar">×</button></div>
+      <input id="editEquipmentId" type="hidden">
+      <div class="field"><label for="editEquipmentName">Nome do equipamento</label><input id="editEquipmentName" type="text" required></div>
+      <div class="field"><label for="editEquipmentType">Tipo</label><select id="editEquipmentType" required><option value="NOTEBOOK">Notebook</option><option value="MONITOR">Monitor</option><option value="HEADSET">Headset</option><option value="TECLADO">Teclado</option><option value="MOUSE">Mouse</option><option value="OUTRO">Outro</option></select></div>
+      <div class="dialog-actions"><button type="button" id="cancelEditDialog" class="button button-secondary">Cancelar</button><button type="submit" class="button button-primary">Salvar alterações</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
